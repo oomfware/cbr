@@ -110,8 +110,8 @@ Run commands with `browser <command> [args...] [--flags]`.
   in the accessibility tree
 - **CSS selectors**: `#login-form`, `.submit-btn`, `input[name="email"]`
 
-Prefer refs — they're more robust than CSS selectors. Always snapshot first to get fresh refs.
-When you do need CSS selectors (e.g. for shadow DOM), use `>>` to pierce shadow roots:
+Prefer refs — they're more robust than CSS selectors. Always snapshot first to get fresh refs. When
+you do need CSS selectors (e.g. for shadow DOM), use `>>` to pierce shadow roots:
 `#host >> .inner-element`.
 
 ## Guidelines
