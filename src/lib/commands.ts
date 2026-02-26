@@ -13,7 +13,7 @@ import * as frame from './commands/frame.ts';
 import * as get from './commands/get.ts';
 import * as hover from './commands/hover.ts';
 import * as is_ from './commands/is.ts';
-import * as open from './commands/open.ts';
+import * as goto from './commands/goto.ts';
 import * as press from './commands/press.ts';
 import * as reload from './commands/reload.ts';
 import * as resources from './commands/resources.ts';
@@ -32,7 +32,7 @@ import type { CommandHandler } from './server.ts';
 const navigation = group(
 	'navigation',
 	or(
-		command('open', open.schema, { description: message`navigate to a URL` }),
+		command('goto', goto.schema, { description: message`navigate the current tab to a URL` }),
 		command('back', back.schema, { description: message`go back in history` }),
 		command('forward', forward.schema, { description: message`go forward in history` }),
 		command('reload', reload.schema, { description: message`reload the current page` }),
@@ -104,8 +104,8 @@ export const createCommandHandler =
 			let data: string | undefined;
 
 			switch (parsed.value.command) {
-				case 'open':
-					data = await open.handler(state, parsed.value);
+				case 'goto':
+					data = await goto.handler(state, parsed.value);
 					break;
 				case 'back':
 					data = await back.handler(state);

@@ -11,7 +11,7 @@ Run commands with `browser <command> [args...] [--flags]`.
 
 **Navigation** (blocking — waits for the DOM to be ready before returning):
 
-- `browser open <url>` — navigate to a URL
+- `browser goto <url>` — navigate the current tab to a URL
 - `browser back` / `browser forward` — history navigation
 - `browser reload` — reload the current page
 
@@ -134,7 +134,7 @@ action succeeded, say so. Explain what you tried and what you observed.
 save screenshots for when you specifically need visual layout or content that isn't represented in
 the accessibility tree.
 
-**Navigation is blocking**: `open`, `back`, `forward`, and `reload` wait for the DOM to load before
+**Navigation is blocking**: `goto`, `back`, `forward`, and `reload` wait for the DOM to load before
 returning. Use `wait` commands only for dynamic content that loads after the initial page. the 5s
 default timeout is usually enough — try it before increasing, and re-snapshot on timeout to
 understand what happened.

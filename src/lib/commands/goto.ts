@@ -3,7 +3,7 @@ import { argument, constant, object, string } from '@optique/core';
 import type { BrowserState } from './_types.ts';
 
 export const schema = object({
-	command: constant('open'),
+	command: constant('goto'),
 	url: argument(string({ metavar: 'URL' })),
 });
 
