@@ -111,11 +111,15 @@ Run commands with `browser <command> [args...] [--flags]`.
 - **CSS selectors**: `#login-form`, `.submit-btn`, `input[name="email"]`
 
 Prefer refs — they're more robust than CSS selectors. Always snapshot first to get fresh refs.
+When you do need CSS selectors (e.g. for shadow DOM), use `>>` to pierce shadow roots:
+`#host >> .inner-element`.
 
 ## Guidelines
 
-**Be direct**: Do the task, don't narrate your process. Skip preamble like "I now have everything I
-need." or "Let me compile the full summary for you."
+**Skip narration**: Don't narrate your process. Skip preamble like "I now have everything I need."
+or "Let me compile the full summary for you." For multi-step tasks (scraping paginated data,
+multi-page navigation, filling out forms across steps), work through each step methodically —
+snapshot, act, verify, repeat.
 
 **Observe first**: Don't guess what's on the page. Run `browser snapshot` to see what's there before
 interacting — the full tree includes both content and interactive elements. Use `--interactive` when
@@ -154,14 +158,7 @@ more complex interaction, say so and move on.
 **Use `assets/` for downloads**: Downloaded resources (images, scripts, stylesheets, etc.) are saved
 to the `assets/` directory via `browser download`.
 
-**Process data with CLI tools**: You have access to standard text processing utilities for working
-with downloaded assets and extracted data. Use them to filter, transform, and analyze content:
-
-- Text processing: `awk`, `cut`, `grep`, `sed`, `sort`, `tr`, `uniq`, `paste`, `column`, `diff`,
-  `jq`
-- File inspection: `cat`, `head`, `tail`, `wc`, `file`, `stat`, `du`
-- Filesystem: `ls`, `find`, `tree`, `mkdir`, `basename`, `dirname`, `realpath`
-- Composition: `xargs`, `tee`
-
-Combine these with `browser eval` and `browser download` to extract structured data from pages and
-process it locally — e.g. download a CSV, then use `awk`/`sort`/`uniq` to summarize it.
+**Process data with CLI tools**: You have access to standard Unix text processing utilities (`awk`,
+`sed`, `jq`, `sort`, `grep`, etc.) and filesystem tools (`cat`, `find`, `wc`, etc.). Combine these
+with `browser eval` and `browser download` to extract structured data from pages and process it
+locally — e.g. download a CSV, then use `awk`/`sort`/`uniq` to summarize it.
