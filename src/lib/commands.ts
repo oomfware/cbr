@@ -4,7 +4,6 @@ import { type BrowserState, CommandError } from './commands/_types.ts';
 import * as back from './commands/back.ts';
 import * as check from './commands/check.ts';
 import * as click from './commands/click.ts';
-import * as close from './commands/close.ts';
 import * as dblclick from './commands/dblclick.ts';
 import * as download from './commands/download.ts';
 import * as eval_ from './commands/eval.ts';
@@ -72,7 +71,6 @@ const inspection = group(
 		command('resources', resources.schema, { description: message`list loaded resources` }),
 		command('styles', styles.schema, { description: message`get computed styles for an element` }),
 		command('download', download.schema, { description: message`download a resource to assets/` }),
-		command('close', close.schema, { description: message`close the current tab` }),
 	),
 );
 
@@ -185,9 +183,6 @@ export const createCommandHandler =
 					break;
 				case 'download':
 					data = await download.handler(state, parsed.value);
-					break;
-				case 'close':
-					data = await close.handler(state);
 					break;
 			}
 

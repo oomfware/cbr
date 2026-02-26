@@ -98,10 +98,6 @@ Run commands with `browser <command> [args...] [--flags]`.
   JSON-stringified). useful for extracting structured data that's hard to read from the
   accessibility tree
 
-**Lifecycle:**
-
-- `browser close` — close the current tab
-
 **Selectors:**
 
 - **Refs** from snapshot: `@e1`, `@e3` — assigned by `browser snapshot`, refer to specific elements
