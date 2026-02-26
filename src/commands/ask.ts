@@ -167,12 +167,8 @@ export const handler = async (args: Args): Promise<void> => {
 		await writeBrowserShim(sessionPath, clientScriptPath, socketPath);
 		await writeSessionSettings(sessionPath);
 
-		// build context prompt
-		const contextParts: string[] = [];
-		if (args.url) {
-			contextParts.push(`The browser is already open at: ${args.url}`);
-		}
-		const contextPrompt = contextParts.length > 0 ? contextParts.join('\n') : '';
+		// build context prompt with current tab state (matches `browser tab list` format)
+		const contextPrompt = `Open tabs:\n* 0: ${page.url()}`;
 
 		spin.text = 'summoning claude';
 
