@@ -74,6 +74,10 @@ export const handler = async (state: BrowserState, args: Args): Promise<string> 
 		case 'close': {
 			const pages = state.context.pages();
 
+			if (pages.length <= 1) {
+				throw new CommandError(`can't close the last tab`);
+			}
+
 			if (sub.index !== undefined) {
 				if (sub.index >= pages.length) {
 					throw new CommandError(`invalid tab index: ${sub.index}`);
