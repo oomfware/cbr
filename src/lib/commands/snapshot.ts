@@ -15,6 +15,10 @@ export const schema = object({
 		option('--compact', { description: message`strip unnamed structural elements and prune empty branches` }),
 		false,
 	),
+	text: withDefault(
+		option('--text', { description: message`text-only mode: show content and refs without role labels` }),
+		false,
+	),
 	depth: optional(option('--depth', integer({ min: 0 }), { description: message`maximum tree depth` })),
 	selector: optional(option('--selector', string(), { description: message`scope to a subtree` })),
 });
@@ -25,6 +29,7 @@ export const handler = async (state: BrowserState, args: Args): Promise<string> 
 	const result = await takeSnapshot(state.page, {
 		interactive: args.interactive || undefined,
 		compact: args.compact || undefined,
+		text: args.text || undefined,
 		depth: args.depth ?? undefined,
 		selector: args.selector ?? undefined,
 	});

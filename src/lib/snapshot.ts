@@ -127,6 +127,8 @@ export interface SnapshotOptions {
 	interactive?: boolean;
 	/** strip unnamed structural roles and prune empty branches */
 	compact?: boolean;
+	/** text-only mode: show content and refs without role labels */
+	text?: boolean;
 	/** max depth of the tree */
 	depth?: number;
 	/** CSS selector to scope the snapshot to */
@@ -195,8 +197,8 @@ export const takeSnapshot = async (
 			continue;
 		}
 
-		// compact mode: drop unnamed structural elements (pruning happens later)
-		if (options.compact && isStructural && !name) {
+		// compact/text mode: drop unnamed structural elements (pruning happens later)
+		if ((options.compact || options.text) && isStructural && !name) {
 			continue;
 		}
 
@@ -245,13 +247,72 @@ export const takeSnapshot = async (
 		}
 	}
 
-	// compact mode: prune branches that have no refs
-	if (options.compact) {
+	// compact/text mode: prune branches that have no refs
+	if (options.compact || options.text) {
 		const pruned = compactTree(output);
+		if (options.text) {
+			return { text: formatTextOnly(pruned), refs };
+		}
 		return { text: pruned.map((l) => l.text).join('\n'), refs };
 	}
 
 	return { text: output.map((l) => l.text).join('\n'), refs };
+};
+
+/**
+ * formats the tree as text-only: strips role labels, keeps names and refs,
+ * drops unnamed elements, and compresses depth gaps.
+ */
+const formatTextOnly = (
+	lines: Array<{ text: string; depth: number; hasRef: boolean; hasContent: boolean }>,
+): string => {
+	const ROLE_LINE_RE = /^\s*-\s*\w+(?:\s+"([^"]*)")?(.*)?$/;
+
+	const items: Array<{ content: string; depth: number }> = [];
+
+	for (const line of lines) {
+		const match = line.text.match(ROLE_LINE_RE);
+		if (match) {
+			const name = match[1];
+			const rest = (match[2] ?? '').trim();
+
+			// extract ref and nth tags
+			const tags = rest.match(/\[ref=\w+\](?:\s*\[nth=\d+\])?/)?.[0] ?? '';
+
+			// skip unnamed elements with no ref
+			if (!name && !tags) {
+				continue;
+			}
+
+			const parts: string[] = [];
+			if (name) {
+				parts.push(name);
+			}
+			if (tags) {
+				parts.push(tags);
+			}
+			items.push({ content: parts.join(' '), depth: line.depth });
+		} else {
+			// non-role line (plain text) — keep if it has content
+			const trimmed = line.text.trim();
+			if (trimmed) {
+				items.push({ content: trimmed, depth: line.depth });
+			}
+		}
+	}
+
+	// compress depth gaps so there are no jumps from removed intermediate elements
+	const depthStack: number[] = [-1];
+	for (const item of items) {
+		while (depthStack.length > 1 && depthStack[depthStack.length - 1]! >= item.depth) {
+			depthStack.pop();
+		}
+		const compressed = depthStack.length - 1;
+		depthStack.push(item.depth);
+		item.depth = compressed;
+	}
+
+	return items.map((item) => `${'  '.repeat(item.depth)}${item.content}`).join('\n');
 };
 
 /**

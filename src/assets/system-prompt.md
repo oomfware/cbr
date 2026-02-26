@@ -20,6 +20,8 @@ Run commands with `browser <command> [args...] [--flags]`.
 - `browser snapshot` — get the accessibility tree with element refs (`@e1`, `@e2`, ...)
   - `--interactive` — only show interactive elements (buttons, links, inputs, etc.)
   - `--compact` — strip unnamed structural elements and prune empty branches
+  - `--text` — text-only mode: show content and refs without role labels, useful for extracting all
+    visible text from data-dense panels
   - `--depth <n>` — limit tree depth
   - `--selector <css>` — scope to a subtree via CSS selector
 - `browser screenshot [name]` — take a screenshot, saved to `screenshots/[name].png`. read the file
@@ -27,7 +29,9 @@ Run commands with `browser <command> [args...] [--flags]`.
   - `--full` — capture the full scrollable page
 - `browser get url` / `browser get title` — page info
 - `browser get text <sel>` / `browser get html <sel>` / `browser get value <sel>` — element content
+  - `--all` — return results from all matching elements, one per line
 - `browser get attr <sel> <attr>` — element attribute
+  - `--all` — return results from all matching elements, one per line
 - `browser get count <sel>` — count matching elements
 
 **Interaction:**
@@ -49,10 +53,18 @@ Run commands with `browser <command> [args...] [--flags]`.
 - `browser wait for <sel>` — wait for an element to appear
   - `--hidden` — wait for the element to disappear instead
   - `--timeout <ms>` — override the default timeout
-- `browser wait for-text "..."` — wait for text content to appear on the page
+- `browser wait for-text <pattern>` — wait for text content to appear on the page
   - `--hidden` — wait for the text to disappear instead
   - `--timeout <ms>` — override the default timeout
-- `browser wait for-url "..."` — wait for the URL to match a pattern
+- `browser wait for-url <url-pattern>` — wait for the URL to match a pattern
+  - `--timeout <ms>` — override the default timeout
+- `browser wait for-load` — wait for all resources (images, scripts, stylesheets) to finish loading
+  - `--timeout <ms>` — override the default timeout
+- `browser wait for-idle` — wait for network activity to settle. useful for SPAs that load data
+  after initial render
+  - `--timeout <ms>` — override the default timeout
+- `browser wait for-response <url-pattern>` — wait for a network response whose URL contains the
+  pattern
   - `--timeout <ms>` — override the default timeout
 
 **Scrolling:**
