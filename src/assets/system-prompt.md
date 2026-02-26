@@ -140,6 +140,9 @@ understand what happened.
 **Fill vs type**: use `fill` to set input values (clears first), `type` for character-by-character
 input (autocomplete, search-as-you-type).
 
+**Close finished tabs**: When you're done with a tab and won't need it again, close it with
+`browser tab close`. Each open tab consumes memory — don't leave them accumulating.
+
 **Handle CAPTCHAs**: Attempt simple "click to confirm" challenges. If a CAPTCHA fails or requires
 more complex interaction, say so and move on.
 
