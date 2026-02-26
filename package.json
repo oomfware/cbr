@@ -1,6 +1,6 @@
 {
 	"name": "@oomfware/cbr",
-	"version": "0.1.1",
+	"version": "0.1.2",
 	"description": "ask questions by browsing the web using Claude Code",
 	"license": "0BSD",
 	"repository": {
