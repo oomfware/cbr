@@ -11,7 +11,10 @@ export const schema = object({
 		option('--interactive', { description: message`only show interactive elements` }),
 		false,
 	),
-	compact: withDefault(option('--compact', { description: message`remove empty lines from output` }), false),
+	compact: withDefault(
+		option('--compact', { description: message`strip unnamed structural elements and prune empty branches` }),
+		false,
+	),
 	depth: optional(option('--depth', integer({ min: 0 }), { description: message`maximum tree depth` })),
 	selector: optional(option('--selector', string(), { description: message`scope to a subtree` })),
 });

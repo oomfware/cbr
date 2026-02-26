@@ -19,12 +19,12 @@ Run commands with `browser <command> [args...] [--flags]`.
 
 - `browser snapshot` — get the accessibility tree with element refs (`@e1`, `@e2`, ...)
   - `--interactive` — only show interactive elements (buttons, links, inputs, etc.)
-  - `--compact` — strip empty structural elements for a shorter tree
+  - `--compact` — strip unnamed structural elements and prune empty branches
   - `--depth <n>` — limit tree depth
-  - `--selector <css>` — scope to a specific element
+  - `--selector <css>` — scope to a subtree via CSS selector
 - `browser screenshot [name]` — take a screenshot, saved to `screenshots/[name].png`. read the file
   to view it.
-  - `--full` — capture full page
+  - `--full` — capture the full scrollable page
 - `browser get url` / `browser get title` — page info
 - `browser get text <sel>` / `browser get html <sel>` / `browser get value <sel>` — element content
 - `browser get attr <sel> <attr>` — element attribute
@@ -46,11 +46,14 @@ Run commands with `browser <command> [args...] [--flags]`.
 
 **Waiting** (default timeout: 5s):
 
-- `browser wait for <sel>` — wait for an element to become visible
-- `browser wait for-text "..."` — wait for text to appear on the page
+- `browser wait for <sel>` — wait for an element to appear
+  - `--hidden` — wait for the element to disappear instead
+  - `--timeout <ms>` — override the default timeout
+- `browser wait for-text "..."` — wait for text content to appear on the page
+  - `--hidden` — wait for the text to disappear instead
+  - `--timeout <ms>` — override the default timeout
 - `browser wait for-url "..."` — wait for the URL to match a pattern
-- `--hidden` — wait for the element/text to disappear instead
-- `--timeout <ms>` — override the default 5s timeout
+  - `--timeout <ms>` — override the default timeout
 
 **Scrolling:**
 
