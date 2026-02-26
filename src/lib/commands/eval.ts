@@ -1,16 +1,21 @@
 import { constant, type InferValue, message, object, passThrough } from '@optique/core';
+import { optional } from '@optique/core/modifiers';
 
 import { type BrowserState, CommandError } from './_types.ts';
 
 export const schema = object({
 	command: constant('eval'),
-	code: passThrough({ format: 'greedy', description: message`JavaScript code to evaluate` }),
+	code: optional(passThrough({ format: 'greedy', description: message`JavaScript code to evaluate` })),
 });
 
 export type Args = InferValue<typeof schema>;
 
-export const handler = async (state: BrowserState, args: Args): Promise<string | undefined> => {
-	const code = args.code.join(' ');
+export const handler = async (
+	state: BrowserState,
+	args: Args,
+	stdin?: string,
+): Promise<string | undefined> => {
+	const code = stdin ?? args.code?.join(' ');
 	if (!code) {
 		throw new CommandError('missing code to evaluate');
 	}

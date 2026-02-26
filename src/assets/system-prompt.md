@@ -84,7 +84,6 @@ Run commands with `browser <command> [args...] [--flags]`.
 
 **Source inspection:**
 
-- `browser source [selector]` — get the full page HTML, or a specific element's outer HTML
 - `browser resources [type]` — list all loaded resources (scripts, stylesheets, images, fonts) with
   URLs and sizes. filter by type: `script`, `link`, `css`, `img`, `font`, `fetch`, `xmlhttprequest`
 - `browser styles <sel> [property]` — get computed styles for an element. without a property,
@@ -94,9 +93,16 @@ Run commands with `browser <command> [args...] [--flags]`.
 
 **JavaScript:**
 
-- `browser eval <code>` — evaluate JavaScript in the page and print the result (objects are
-  JSON-stringified). useful for extracting structured data that's hard to read from the
-  accessibility tree
+- `browser eval [code]` — evaluate JavaScript in the page and print the result. useful for
+  extracting structured data that's hard to read from the accessibility tree. for anything beyond
+  simple expressions, pass code via stdin with a quoted heredoc to avoid shell escaping issues:
+  ```
+  browser eval <<'EOF'
+  document.querySelectorAll('.item').forEach(el => {
+    console.log(`${el.dataset.id}: ${el.textContent}`)
+  })
+  EOF
+  ```
 
 **Selectors:**
 

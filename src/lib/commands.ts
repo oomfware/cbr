@@ -21,7 +21,6 @@ import * as screenshot from './commands/screenshot.ts';
 import * as scroll from './commands/scroll.ts';
 import * as select from './commands/select.ts';
 import * as snapshot from './commands/snapshot.ts';
-import * as source from './commands/source.ts';
 import * as styles from './commands/styles.ts';
 import * as tab from './commands/tab.ts';
 import * as typeText from './commands/type-text.ts';
@@ -67,7 +66,6 @@ const inspection = group(
 		command('frame', frame.schema, { description: message`list or switch frames` }),
 		command('tab', tab.schema, { description: message`list, open, switch, or close tabs` }),
 		command('eval', eval_.schema, { description: message`evaluate JavaScript in the page` }),
-		command('source', source.schema, { description: message`get page or element HTML source` }),
 		command('resources', resources.schema, { description: message`list loaded resources` }),
 		command('styles', styles.schema, { description: message`get computed styles for an element` }),
 		command('download', download.schema, { description: message`download a resource to assets/` }),
@@ -83,7 +81,7 @@ export const parser = or(navigation, querying, inspection);
  */
 export const createCommandHandler =
 	(state: BrowserState): CommandHandler =>
-	async (args) => {
+	async (args, stdin) => {
 		if (args[0] === 'help' || args[0] === '--help') {
 			const helpArgs = args.slice(1);
 			const page = getDocPage(parser, helpArgs);
@@ -170,10 +168,7 @@ export const createCommandHandler =
 					data = await tab.handler(state, parsed.value);
 					break;
 				case 'eval':
-					data = await eval_.handler(state, parsed.value);
-					break;
-				case 'source':
-					data = await source.handler(state, parsed.value);
+					data = await eval_.handler(state, parsed.value, stdin);
 					break;
 				case 'resources':
 					data = await resources.handler(state, parsed.value);

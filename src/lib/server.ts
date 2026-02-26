@@ -7,10 +7,12 @@ import { debug } from './debug.ts';
 const RequestSchema = v.object({
 	id: v.string(),
 	args: v.array(v.string()),
+	stdin: v.optional(v.string()),
 });
 
 export type CommandHandler = (
 	args: readonly string[],
+	stdin?: string,
 ) => Promise<{ ok: boolean; data?: string; error?: string }>;
 
 /**
@@ -73,12 +75,12 @@ const handleRequest = async (line: string, socket: Socket, handler: CommandHandl
 		return;
 	}
 
-	const { id, args } = result.output;
+	const { id, args, stdin } = result.output;
 
 	try {
 		debug(`request: ${line}`);
 
-		const result = await handler(args);
+		const result = await handler(args, stdin);
 		const response = JSON.stringify({ id, ...result });
 
 		debug(`response: ${response}`);
